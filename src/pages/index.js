@@ -1,35 +1,44 @@
 import { useState } from "react";
-import Div from "@/components/Hook";
+// import Div from "./index";
 
 const Page = () => {
   const [inputValue, setInputValue] = useState("");
-  const [lists, setList] = useState([]);
+  const [lists, setList, list] = useState([]);
 
-  const handleInputValue = (value) => {
-    setInputValue(value.target.value);
+  const handleInputValue = (event) => {
+    setInputValue(event.target.value);
   };
-
-  const handleAddValue = () => {
-    if (inputValue == "") return;
+  const addList = () => {
     setList([...lists, inputValue]);
     setInputValue("");
   };
 
-  const removeMe = (index) => setList(lists.filter((_, i) => i !== index));
+  const deleteList = (listId) => {
+    const newList = lists.filter((list) => list.id !== listId);
+    setList(newList);
+  };
+
+  const doneList = (listId) => {
+    const res = list.map((list) => {
+      if (list.id === listId) {
+        list.isDone = true;
+        setList([...lists]);
+      }
+    });
+    console.log(res);
+  };
+
   return (
-    <div className="parent-position">
-      <div className="position">
-        <input value={inputValue} onChange={(e) => handleInputValue(e)} />
-        <button onClick={() => handleAddValue()}>Add</button>
-      </div>
+    <div>
+      <input value={inputValue} onChange={(event) => handleInputValue(event)} />
+      <button onClick={() => addList()}>add List</button>
       {lists.map((list, index) => {
         return (
-          <Div
-            key={index}
-            list={list}
-            index={index}
-            onDelete={() => removeMe(index)}
-          />
+          <div>
+            <div key={index}>{list}</div>
+            <button onClick={() => deleteList(list.id)}>delete</button>
+            <button onClick={() => doneList(list.id)}>Done</button>
+          </div>
         );
       })}
     </div>
